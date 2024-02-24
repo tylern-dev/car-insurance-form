@@ -45,6 +45,7 @@ const ResumeApplication = () => {
     const applicationId = params.id ?? '';
 
     const [quote, setQuote] = useState();
+    const [isAddVehicleButtonDisabled, setAddVehicleButtonDisabled] = useState(false);
 
     const { data, isLoading } = useQuery({
         queryKey: ['application', applicationId],
@@ -123,7 +124,11 @@ const ResumeApplication = () => {
         const formattedData = getFormattedData(data);
         saveApplication.mutate(formattedData);
     };
-
+    useEffect(() => {
+        if (vehiclesFieldArray.fields.length === 3) {
+            setAddVehicleButtonDisabled(true);
+        }
+    });
     useEffect(() => {
         if (data) {
             reset({
@@ -150,6 +155,7 @@ const ResumeApplication = () => {
                         <div>
                             <h3>Vehicles</h3>
                             <button
+                                disabled={isAddVehicleButtonDisabled}
                                 type="button"
                                 onClick={() =>
                                     vehiclesFieldArray.append({

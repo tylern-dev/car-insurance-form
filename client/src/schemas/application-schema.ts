@@ -25,7 +25,7 @@ const peopleSchema = z.object({
 const vehicleSchema = z.object({
     make: z.string().min(1, { message: 'Required' }),
     model: z.string().min(1, { message: 'Required' }),
-    year: z.number().min(1, { message: 'Required' }),
+    year: z.number().min(1, { message: 'Required' }).nullable(),
     vin: z.string().min(1, { message: 'Required' }),
 });
 
@@ -33,7 +33,7 @@ export const applicationSchema = z.object({
     firstName: z.string().min(1, { message: 'Required' }),
     lastName: z.string().min(1, { message: 'Required' }),
     dob: z.string().min(1, { message: 'Required' }),
-    address: addressSchema.nullable(),
+    address: addressSchema,
     people: z.array(peopleSchema),
     vehicles: z.array(vehicleSchema),
 });

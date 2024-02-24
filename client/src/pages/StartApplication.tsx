@@ -10,10 +10,15 @@ import { getApplicationId } from './helpers';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import { StyledColumn } from '../components/styled-components';
+import { APIError } from '../utils/api-error';
 
 const StartApplication = () => {
     const methods = useForm<FormValues>();
-    const { handleSubmit } = methods;
+    const {
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = methods;
     const navigate = useNavigate();
 
     const [value, setValue] = useLocalStorage('applicationId', '');
@@ -28,6 +33,14 @@ const StartApplication = () => {
                 setValue(applicationId);
             }
             navigate(url.pathname);
+        },
+        onError: (error: APIError) => {
+            error.data.forEach(({ path, message }: { path: string[]; message: string }) => {
+                const fieldName: any = path.join('.');
+                setError(fieldName, {
+                    message: message,
+                });
+            });
         },
     });
 
@@ -58,7 +71,12 @@ const StartApplication = () => {
                     <FormInput name="firstName" label="First Name" />
                     <FormInput name="lastName" label="Last Name" />
 
-                    <FormInput name="dob" label="Date of Birth" type="date" />
+                    <FormInput
+                        name="dob"
+                        label="Date of Birth"
+                        type="date"
+                        error={errors.dob?.message}
+                    />
                     <StyledColumn>
                         <FormInput name="address.street" label="Street" />
                         <FormInput name="address.city" label="City" />

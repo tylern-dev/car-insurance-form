@@ -7,7 +7,6 @@ import { createApplication } from '../services/application-service';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useEffect } from 'react';
 import { getApplicationId } from './helpers';
-import styled from 'styled-components';
 import Button from '../components/Button';
 import { StyledColumn } from '../components/styled-components';
 import { APIError } from '../utils/api-error';

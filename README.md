@@ -1,3 +1,10 @@
+# Getting Started
+
+1. run `npm run db:reset` to reset the db
+2. run `npm run db:generate` to set things up if the server doesn't start
+3. run `npm start`
+4. Enjoy
+
 # This Repository
 
 This is a skeleton repository that you can use to complete the take home challenge. It provides some

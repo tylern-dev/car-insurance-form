@@ -1,0 +1,55 @@
+{
+    "name": "hugo-interview-challenge",
+    "version": "1.0.0",
+    "description": "Interview starter project for the Hugo take home project",
+    "scripts": {
+        "start:api": "nodemon --inspect --watch \"api/**/*\" --exec node --require @swc-node/register --require dotenv/config ./api/index.ts",
+        "start:client": "vite ./client",
+        "start": "concurrently --kill-others \"npm run start:api\" \"npm run start:client\"",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "db:reset": "npx prisma migrate reset --schema=api/prisma/schema.prisma",
+        "db:generate": "npx prisma generate --schema=api/prisma/schema.prisma"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/popularlab/hugo-interview-challenge.git"
+    },
+    "author": "Hugo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/popularlab/hugo-interview-challenge/issues"
+    },
+    "homepage": "https://github.com/popularlab/hugo-interview-challenge#readme",
+    "dependencies": {
+        "@hookform/resolvers": "^3.3.4",
+        "@prisma/client": "^5.7.0",
+        "@tanstack/react-query": "^5.22.2",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.50.1",
+        "react-router": "^6.22.1",
+        "react-router-dom": "^6.22.1",
+        "styled-components": "^6.1.8",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@swc-node/register": "^1.6.8",
+        "@testing-library/react": "^14.2.1",
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.10.4",
+        "@types/react": "^18.2.43",
+        "@types/react-dom": "^18.2.17",
+        "@vitejs/plugin-react": "^4.2.1",
+        "autoprefixer": "^10.4.17",
+        "concurrently": "^8.2.2",
+        "jest": "^29.7.0",
+        "nodemon": "^3.0.2",
+        "prettier": "^3.1.1",
+        "prisma": "^5.7.0",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.8"
+    }
+}

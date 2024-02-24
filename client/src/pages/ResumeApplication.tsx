@@ -147,7 +147,7 @@ const ResumeApplication = () => {
     }
     return (
         <>
-            <h1 className="text-3xl font-bold underline">Resume your application</h1>
+            <h1>Resume your application</h1>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(submitForm)}>
                     <PersonalInformation errors={errors} />

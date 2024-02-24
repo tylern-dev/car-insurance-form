@@ -1,28 +1,20 @@
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { zodResolver } from '@hookform/resolvers/zod';
-import FormInput from '../components/FormInput';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import {
-    getApplication,
-    submitApplication,
-    updateApplication,
-} from '../services/application-service';
+import { getApplication } from '../services/application-service';
 import { useEffect, useState } from 'react';
 import { convertDateToString } from '../utils/date-utils';
 import { applicationSchema } from '../schemas/application-schema';
-import Dropdown from '../components/Dropdown';
 import type { ApplicationInputs } from '../types';
-import { APIError } from '../utils/api-error';
 import { getFormattedData } from './helpers';
-import { LOCAL_STORAGE_VALUE } from '../consts';
-import { ZodType } from 'zod';
 import Button from '../components/Button';
 import styled from 'styled-components';
-import { StyledColumn } from '../components/styled-components';
 import PersonalInformation from '../components/formFields/PersonalInformation';
 import VehicleInformation from '../components/formFields/VehicleInformation';
 import PeopleInformation from '../components/formFields/PeopleInformation';
+import { useValidateApplication } from '../hooks/useValidateApplication';
+import { useSaveApplication } from '../hooks/useSaveApplication';
+import { customResolver } from '../utils/form-resolver';
 
 const StyledButtonContainer = styled.div`
     display: flex;
@@ -32,55 +24,12 @@ const StyledButtonContainer = styled.div`
 
 const defaultVehicle = { make: '', model: '', year: '', vin: '' };
 
-const customResolver =
-    (schema: ZodType) => async (data: ApplicationInputs, context: unknown, options: any) => {
-        const formattedData = getFormattedData(data);
-
-        return zodResolver(schema)(formattedData, context, options);
-    };
-
 const ResumeApplication = () => {
     const params = useParams();
 
     const applicationId = params.id ?? '';
 
-    const [quote, setQuote] = useState();
     const [isAddVehicleButtonDisabled, setAddVehicleButtonDisabled] = useState(false);
-
-    const { data, isLoading } = useQuery({
-        queryKey: ['application', applicationId],
-        queryFn: () => getApplication(applicationId),
-        enabled: !!applicationId,
-    });
-
-    const validateApplication = useMutation({
-        mutationFn: (data: ApplicationInputs) => submitApplication(applicationId, data),
-        onSuccess: (data) => {
-            setQuote(data.quote);
-            localStorage.removeItem(LOCAL_STORAGE_VALUE);
-        },
-        onError: (error: APIError) => {
-            error.data.forEach(({ path, message }: { path: string[]; message: string }) => {
-                const fieldName: any = path.join('.');
-                setError(fieldName, {
-                    message: message,
-                });
-            });
-        },
-    });
-
-    const saveApplication = useMutation({
-        mutationFn: (data: ApplicationInputs) => updateApplication(applicationId, data),
-        onSuccess: () => alert('Application Saved'),
-        onError: (error: APIError) => {
-            error.data.forEach(({ path, message }: { path: string[]; message: string }) => {
-                const fieldName: any = path.join('.');
-                setError(fieldName, {
-                    message: message,
-                });
-            });
-        },
-    });
 
     const methods = useForm<ApplicationInputs>({
         resolver: customResolver(applicationSchema),
@@ -96,7 +45,15 @@ const ResumeApplication = () => {
         formState: { errors },
     } = methods;
 
-    console.log(errors);
+    const { data, isLoading } = useQuery({
+        queryKey: ['application', applicationId],
+        queryFn: () => getApplication(applicationId),
+        enabled: !!applicationId,
+    });
+
+    const { mutate: validateApplication, quote } = useValidateApplication(applicationId, setError);
+
+    const { mutate: saveApplication } = useSaveApplication(applicationId, setError);
 
     const personsFieldArray = useFieldArray({
         control,
@@ -116,13 +73,13 @@ const ResumeApplication = () => {
         const data = getValues();
         const formattedData = getFormattedData(data);
 
-        validateApplication.mutate(formattedData);
+        validateApplication(formattedData);
     };
     const handleSave = () => {
         clearErrors();
         const data = getValues();
         const formattedData = getFormattedData(data);
-        saveApplication.mutate(formattedData);
+        saveApplication(formattedData);
     };
     useEffect(() => {
         if (vehiclesFieldArray.fields.length === 3) {

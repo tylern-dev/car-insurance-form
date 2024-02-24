@@ -20,6 +20,9 @@ import { ZodType } from 'zod';
 import Button from '../components/Button';
 import styled from 'styled-components';
 import { StyledColumn } from '../components/styled-components';
+import PersonalInformation from '../components/formFields/PersonalInformation';
+import VehicleInformation from '../components/formFields/VehicleInformation';
+import PeopleInformation from '../components/formFields/PeopleInformation';
 
 const StyledButtonContainer = styled.div`
     display: flex;
@@ -28,28 +31,6 @@ const StyledButtonContainer = styled.div`
 `;
 
 const defaultVehicle = { make: '', model: '', year: '', vin: '' };
-const dropDownOptions = [
-    {
-        name: '',
-        value: '',
-    },
-    {
-        name: 'Spouse',
-        value: 'spouse',
-    },
-    {
-        name: 'Sibling',
-        value: 'sibling',
-    },
-    {
-        name: 'Friend',
-        value: 'friend',
-    },
-    {
-        name: 'Other',
-        value: 'other',
-    },
-];
 
 const customResolver =
     (schema: ZodType) => async (data: ApplicationInputs, context: unknown, options: any) => {
@@ -164,40 +145,7 @@ const ResumeApplication = () => {
             <h1 className="text-3xl font-bold underline">Resume your application</h1>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(submitForm)}>
-                    <FormInput
-                        name="firstName"
-                        label="First Name"
-                        error={errors.firstName?.message}
-                    />
-                    <FormInput name="lastName" label="Last Name" error={errors.lastName?.message} />
-                    <FormInput
-                        name="dob"
-                        label="Date of Birth"
-                        type="date"
-                        error={errors.dob?.message}
-                    />
-                    <StyledColumn>
-                        <FormInput
-                            name="address.street"
-                            label="Street"
-                            error={errors.address?.street?.message}
-                        />
-                        <FormInput
-                            name="address.city"
-                            label="City"
-                            error={errors.address?.city?.message}
-                        />
-                        <FormInput
-                            name="address.state"
-                            label="State"
-                            error={errors.address?.state?.message}
-                        />
-                        <FormInput
-                            name="address.zipCode"
-                            label="Zip Code"
-                            error={errors.address?.zipCode?.message}
-                        />
-                    </StyledColumn>
+                    <PersonalInformation errors={errors} />
                     <div>
                         <div>
                             <h3>Vehicles</h3>
@@ -216,33 +164,7 @@ const ResumeApplication = () => {
                             </button>
                         </div>
                         <p>Limit 3</p>
-                        {vehiclesFieldArray.fields.map((item, index) => (
-                            <div key={item.id}>
-                                <StyledColumn>
-                                    <FormInput
-                                        name={`vehicles.${index}.make`}
-                                        label="Make"
-                                        error={errors.vehicles?.[index]?.make?.message}
-                                        rules={{ required: true }}
-                                    />
-                                    <FormInput
-                                        name={`vehicles.${index}.model`}
-                                        label="Model"
-                                        error={errors.vehicles?.[index]?.model?.message}
-                                    />
-                                    <FormInput
-                                        name={`vehicles.${index}.year`}
-                                        label="Year"
-                                        error={errors.vehicles?.[index]?.year?.message}
-                                    />
-                                    <FormInput
-                                        name={`vehicles.${index}.vin`}
-                                        label="VIN"
-                                        error={errors.vehicles?.[index]?.vin?.message}
-                                    />
-                                </StyledColumn>
-                            </div>
-                        ))}
+                        <VehicleInformation fieldArray={vehiclesFieldArray} errors={errors} />
                     </div>
                     <div>
                         <div>
@@ -261,33 +183,7 @@ const ResumeApplication = () => {
                                 Add Another Person
                             </button>
                         </div>
-                        {personsFieldArray.fields.map((item, index) => (
-                            <div key={index}>
-                                <StyledColumn>
-                                    <FormInput
-                                        name={`people.${index}.firstName`}
-                                        label="First Name"
-                                        error={errors.people?.[index]?.firstName?.message}
-                                    />
-                                    <FormInput
-                                        name={`people.${index}.lastName`}
-                                        label="Last Name"
-                                        error={errors.people?.[index]?.lastName?.message}
-                                    />
-                                    <FormInput
-                                        name={`people.${index}.dob`}
-                                        label="Date of Birth"
-                                        type="date"
-                                        error={errors.people?.[index]?.dob?.message}
-                                    />
-                                    <Dropdown
-                                        name={`people.${index}.relationship`}
-                                        options={dropDownOptions}
-                                        error={errors.people?.[index]?.relationship?.message}
-                                    />
-                                </StyledColumn>
-                            </div>
-                        ))}
+                        <PeopleInformation fieldArray={personsFieldArray} errors={errors} />
                     </div>
                     <Button type="submit" name="Finish" />
                 </form>

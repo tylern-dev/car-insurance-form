@@ -1,4 +1,4 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormField, Label, StyledSelect } from './styled-components';
 
 type Option = {
@@ -7,20 +7,17 @@ type Option = {
 };
 type DropdownProps = {
     name: string;
+    label: string;
     error?: string;
     options: Option[];
 };
 
-const Dropdown = ({ name, error, options }: DropdownProps) => {
-    const {
-        register,
-        control,
-        formState: { errors },
-    } = useFormContext();
+const Dropdown = ({ name, error, label, options }: DropdownProps) => {
+    const { register } = useFormContext();
 
     return (
         <FormField>
-            <Label>Relationship</Label>
+            <Label>{label}</Label>
             <StyledSelect {...register(name)}>
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>

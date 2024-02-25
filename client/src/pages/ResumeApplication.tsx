@@ -14,12 +14,13 @@ import VehicleInformation from '../components/formFields/VehicleInformation';
 import PeopleInformation from '../components/formFields/PeopleInformation';
 import { useValidateApplication } from '../hooks/useValidateApplication';
 import { useSaveApplication } from '../hooks/useSaveApplication';
-import { customResolver } from '../utils/form-resolver';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const StyledButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     gap: 4px;
+    margin-top: 16px;
 `;
 
 const defaultVehicle = { make: '', model: '', year: '', vin: '' };
@@ -32,7 +33,7 @@ const ResumeApplication = () => {
     const [isAddVehicleButtonDisabled, setAddVehicleButtonDisabled] = useState(false);
 
     const methods = useForm<ApplicationInputs>({
-        resolver: customResolver(applicationSchema),
+        resolver: zodResolver(applicationSchema),
     });
 
     const {
@@ -71,8 +72,7 @@ const ResumeApplication = () => {
     const submitForm = () => {
         clearErrors();
         const data = getValues();
-        const formattedData = getFormattedData(data);
-
+        const formattedData = applicationSchema.parse(data);
         validateApplication(formattedData);
     };
     const handleSave = () => {
@@ -110,7 +110,7 @@ const ResumeApplication = () => {
                     <PersonalInformation errors={errors} />
                     <div>
                         <div>
-                            <h3>Vehicles</h3>
+                            <h2>Vehicles</h2>
                             <button
                                 disabled={isAddVehicleButtonDisabled}
                                 type="button"
@@ -118,7 +118,7 @@ const ResumeApplication = () => {
                                     vehiclesFieldArray.append({
                                         make: '',
                                         model: '',
-                                        year: null,
+                                        year: '',
                                         vin: '',
                                     })
                                 }
@@ -131,7 +131,7 @@ const ResumeApplication = () => {
                     </div>
                     <div>
                         <div>
-                            <h3>Additional People</h3>
+                            <h2>Additional People</h2>
                             <button
                                 type="button"
                                 onClick={() =>
@@ -146,12 +146,13 @@ const ResumeApplication = () => {
                                 Add Another Person
                             </button>
                         </div>
+
                         <PeopleInformation fieldArray={personsFieldArray} errors={errors} />
                     </div>
-                    <Button type="submit" name="Finish" />
                 </form>
                 <StyledButtonContainer>
-                    <Button onClick={handleSave} name="Save Application" secondary />
+                    <Button name="Finish" onClick={() => handleSubmit(submitForm)()} />
+                    <Button onClick={handleSave} name="Save Application" theme="secondary" />
                 </StyledButtonContainer>
             </FormProvider>
         </>

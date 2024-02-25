@@ -1,8 +1,9 @@
 import { FieldErrors, UseFieldArrayReturn } from 'react-hook-form';
 import { ApplicationInputs } from '../../types';
-import { StyledColumn } from '../styled-components';
+import { StyledColumn, StyledSection } from '../styled-components';
 import FormInput from '../FormInput';
 import Dropdown from '../Dropdown';
+import styled from 'styled-components';
 
 type Props = {
     fieldArray: UseFieldArrayReturn<ApplicationInputs, 'people'>;
@@ -32,7 +33,7 @@ const dropDownOptions = [
 ];
 const PeopleInformation = ({ fieldArray, errors }: Props) => {
     return fieldArray.fields.map((item, index) => (
-        <div key={index}>
+        <StyledSection key={index}>
             <StyledColumn>
                 <FormInput
                     name={`people.${index}.firstName`}
@@ -44,6 +45,7 @@ const PeopleInformation = ({ fieldArray, errors }: Props) => {
                     label="Last Name"
                     error={errors.people?.[index]?.lastName?.message}
                 />
+
                 <FormInput
                     name={`people.${index}.dob`}
                     label="Date of Birth"
@@ -52,11 +54,12 @@ const PeopleInformation = ({ fieldArray, errors }: Props) => {
                 />
                 <Dropdown
                     name={`people.${index}.relationship`}
+                    label="Relationship"
                     options={dropDownOptions}
                     error={errors.people?.[index]?.relationship?.message}
                 />
             </StyledColumn>
-        </div>
+        </StyledSection>
     ));
 };
 

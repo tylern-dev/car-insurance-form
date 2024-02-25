@@ -4,12 +4,12 @@ export type Props = {
     onClick?: () => void;
     name: string;
     type?: 'button' | 'submit' | 'reset';
-    secondary?: boolean;
+    theme?: 'secondary';
 };
 
-const Button = ({ name, type, onClick, secondary }: Props) => {
+const Button = ({ name, type, onClick, theme }: Props) => {
     return (
-        <StyledButton name={name} type={type} onClick={onClick} secondary={secondary}>
+        <StyledButton name={name} type={type} onClick={onClick} theme={theme}>
             {name}
         </StyledButton>
     );

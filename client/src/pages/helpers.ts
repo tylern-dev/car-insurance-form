@@ -3,7 +3,7 @@ import { ApplicationInputs } from '../types';
 export function getFormattedData(data: ApplicationInputs) {
     const formattedAddress = {
         ...data.address,
-        zipCode: data.address?.zipCode && Number(data.address?.zipCode),
+        zipCode: data.address?.zipCode ? Number(data.address?.zipCode) : null,
     };
     const formattedVehicleData = data?.vehicles?.map((vehicle) => ({
         ...vehicle,

@@ -13,7 +13,7 @@ export const StyledButton = styled.button<Props>`
     font-weight: bold;
     border: none;
     border-radius: 4px;
-    background-color: ${(props) => (props.secondary ? '#3498db' : '#4caf50')};
+    background-color: ${(props) => (props.theme === 'secondary' ? '#3498db' : '#4caf50')};
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -32,6 +32,10 @@ export const StyledColumn = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 40px;
+`;
+
+export const StyledSection = styled.div`
+    margin-bottom: 24px;
 `;
 
 export const FormField = styled.div`

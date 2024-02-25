@@ -1,6 +1,6 @@
-import { FieldArray, FieldErrors, UseFieldArrayReturn } from 'react-hook-form';
+import { FieldErrors, UseFieldArrayReturn } from 'react-hook-form';
 import { ApplicationInputs } from '../../types';
-import { StyledColumn } from '../styled-components';
+import { StyledColumn, StyledSection } from '../styled-components';
 import FormInput from '../FormInput';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 const VehicleInformation = ({ fieldArray, errors }: Props) => {
     return fieldArray.fields.map((item, index) => (
-        <div key={item.id}>
+        <StyledSection key={item.id}>
             <StyledColumn>
                 <FormInput
                     name={`vehicles.${index}.make`}
@@ -32,7 +32,7 @@ const VehicleInformation = ({ fieldArray, errors }: Props) => {
                     error={errors.vehicles?.[index]?.vin?.message}
                 />
             </StyledColumn>
-        </div>
+        </StyledSection>
     ));
 };
 

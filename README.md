@@ -1,9 +1,11 @@
 # Getting Started
 
-1. run `npm run db:reset` to reset the db
-2. run `npm run db:generate` to set things up if the server doesn't start
-3. run `npm start`
-4. Enjoy
+1. run `npm install`
+2. run `npm run db:reset` to reset the db (this will make sure the db is clean and migrations are
+   ran)
+3. run `npm run db:generate` to set things up if the server doesn't start
+4. run `npm start`
+5. Enjoy
 
 # This Repository
 

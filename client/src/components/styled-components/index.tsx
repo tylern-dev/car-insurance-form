@@ -28,6 +28,13 @@ export const StyledButton = styled.button<Props>`
     }
 `;
 
+export const StyledButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    margin-top: 16px;
+`;
+
 export const StyledColumn = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;

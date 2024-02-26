@@ -1,27 +1,22 @@
+import { useEffect } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { getApplication } from '../services/application-service';
-import { useEffect, useState } from 'react';
 import { convertDateToString } from '../utils/date-utils';
-import { applicationSchema } from '../schemas/application-schema';
+import { applicationFormSchema } from '../schemas/application-schema';
 import type { ApplicationInputs } from '../types';
 import { getFormattedData } from './helpers';
 import Button from '../components/Button';
-import styled from 'styled-components';
 import PersonalInformation from '../components/formFields/PersonalInformation';
 import VehicleInformation from '../components/formFields/VehicleInformation';
 import PeopleInformation from '../components/formFields/PeopleInformation';
 import { useValidateApplication } from '../hooks/useValidateApplication';
 import { useSaveApplication } from '../hooks/useSaveApplication';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const StyledButtonContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 4px;
-    margin-top: 16px;
-`;
+import Loading from '../components/Loading';
+import Quote from '../components/Quote';
+import { StyledButtonContainer } from '../components/styled-components';
 
 const defaultVehicle = { make: '', model: '', year: '', vin: '' };
 
@@ -30,10 +25,8 @@ const ResumeApplication = () => {
 
     const applicationId = params.id ?? '';
 
-    const [isAddVehicleButtonDisabled, setAddVehicleButtonDisabled] = useState(false);
-
     const methods = useForm<ApplicationInputs>({
-        resolver: zodResolver(applicationSchema),
+        resolver: zodResolver(applicationFormSchema),
     });
 
     const {
@@ -72,7 +65,7 @@ const ResumeApplication = () => {
     const submitForm = () => {
         clearErrors();
         const data = getValues();
-        const formattedData = applicationSchema.parse(data);
+        const formattedData = applicationFormSchema.parse(data);
         validateApplication(formattedData);
     };
     const handleSave = () => {
@@ -81,11 +74,9 @@ const ResumeApplication = () => {
         const formattedData = getFormattedData(data);
         saveApplication(formattedData);
     };
-    useEffect(() => {
-        if (vehiclesFieldArray.fields.length === 3) {
-            setAddVehicleButtonDisabled(true);
-        }
-    });
+
+    const isAddVehicleButtonDisabled = vehiclesFieldArray.fields.length >= 3;
+
     useEffect(() => {
         if (data) {
             reset({
@@ -97,10 +88,10 @@ const ResumeApplication = () => {
         }
     }, [data, methods]);
 
-    if (isLoading) return <h1>Loading...</h1>;
+    if (isLoading) return <Loading />;
 
     if (quote) {
-        return <h1>{`Congrats! Your price is $${quote}`}</h1>;
+        return <Quote quote={quote} />;
     }
     return (
         <>
@@ -118,7 +109,7 @@ const ResumeApplication = () => {
                                     vehiclesFieldArray.append({
                                         make: '',
                                         model: '',
-                                        year: '',
+                                        year: null,
                                         vin: '',
                                     })
                                 }
@@ -149,11 +140,11 @@ const ResumeApplication = () => {
 
                         <PeopleInformation fieldArray={personsFieldArray} errors={errors} />
                     </div>
+                    <StyledButtonContainer>
+                        <Button name="Finish" type="submit" />
+                        <Button onClick={handleSave} name="Save Application" theme="secondary" />
+                    </StyledButtonContainer>
                 </form>
-                <StyledButtonContainer>
-                    <Button name="Finish" onClick={() => handleSubmit(submitForm)()} />
-                    <Button onClick={handleSave} name="Save Application" theme="secondary" />
-                </StyledButtonContainer>
             </FormProvider>
         </>
     );

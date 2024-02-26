@@ -7,7 +7,7 @@ export type Props = {
     theme?: 'secondary';
 };
 
-const Button = ({ name, type, onClick, theme }: Props) => {
+const Button = ({ name, type = 'button', onClick, theme }: Props) => {
     return (
         <StyledButton name={name} type={type} onClick={onClick} theme={theme}>
             {name}

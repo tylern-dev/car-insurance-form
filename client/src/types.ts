@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { applicationSchema } from './schemas/application-schema';
+import { applicationFormSchema } from './schemas/application-schema';
 
 type Address = {
     street?: string;
@@ -15,4 +15,4 @@ export type FormValues = {
     address?: Address;
 };
 
-export type ApplicationInputs = z.infer<typeof applicationSchema>;
+export type ApplicationInputs = z.infer<typeof applicationFormSchema>;

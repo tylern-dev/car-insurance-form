@@ -47,11 +47,11 @@ const vehicleSchema = z.object({
                 message: 'Required',
             }
         )
-        .transform((val) => Number(val)),
+        .transform((val) => (typeof val === 'string' ? Number(val) : null)),
     vin: z.string().min(1, { message: 'Required' }),
 });
 
-export const applicationSchema = z.object({
+export const applicationFormSchema = z.object({
     firstName: z.string().min(1, { message: 'Required' }),
     lastName: z.string().min(1, { message: 'Required' }),
     dob: z.string().min(1, { message: 'Required' }),

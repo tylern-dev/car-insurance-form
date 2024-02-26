@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router';
 import useLocalStorage from './useLocalStorage';
 import { createApplication } from '../services/application-service';
 import { getApplicationId } from '../pages/helpers';
@@ -12,7 +11,6 @@ type ReturnShape = {
     applicationId: string;
 };
 export const useCreateApplication = (setError: UseFormSetError<FormValues>): ReturnShape => {
-    const navigate = useNavigate();
     const [applicationId, setApplicationId] = useLocalStorage('applicationId', '');
 
     const mutation = useMutation({
@@ -22,7 +20,6 @@ export const useCreateApplication = (setError: UseFormSetError<FormValues>): Ret
             const id = getApplicationId(url.pathname);
             if (id) {
                 setApplicationId(id);
-                navigate(url.pathname);
             }
         },
         onError: (error: APIError) => {

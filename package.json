@@ -1,7 +1,7 @@
 {
-    "name": "hugo-interview-challenge",
+    "name": "Tyler",
     "version": "1.0.0",
-    "description": "Interview starter project for the Hugo take home project",
+    "description": "",
     "scripts": {
         "start:api": "nodemon --inspect --watch \"api/**/*\" --exec node --require @swc-node/register --require dotenv/config ./api/index.ts",
         "start:client": "vite ./client",
@@ -10,16 +10,8 @@
         "db:reset": "npx prisma migrate reset --schema=api/prisma/schema.prisma",
         "db:generate": "npx prisma generate --schema=api/prisma/schema.prisma"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@github.com/popularlab/hugo-interview-challenge.git"
-    },
-    "author": "Hugo",
+    "author": "Tyler Negro",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/popularlab/hugo-interview-challenge/issues"
-    },
-    "homepage": "https://github.com/popularlab/hugo-interview-challenge#readme",
     "dependencies": {
         "@hookform/resolvers": "^3.3.4",
         "@prisma/client": "^5.7.0",
